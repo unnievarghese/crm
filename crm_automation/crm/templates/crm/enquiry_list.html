@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+<body>
+    <table class="table">
+        <tr>
+            <td>Enquiry Id</td>
+            <td>Name</td>
+            <td>Qualification</td>
+            <td>Course</td>
+            <td>Batch</td>
+            <td>Contact</td>
+            <td>Follow-up Date</td>
+            <td>Status</td>
+            <td> Registration Status</td>
+        </tr>
+        {% for enquiry in enquires %}
+        <tr>
+            <td>{{enquiry.enquiryid}}</td>
+            <td>{{enquiry.studentname}}</td>
+            <td>{{enquiry.qualification}}</td>
+            <td>{{enquiry.course}}</td>
+            <td>{{enquiry.batch}}</td>
+            <td>{{enquiry.contact}}</td>
+            <td>{{enquiry.followup_date}}</td>
+            <td>{{enquiry.status}}</td>
+            {%if enquiry.status == 'call_back'%}
+                <td><a href="{%url 'admission' enquiry.enquiryid%}"> Register </a></td>
+            {%else%}
+                <td>Admitted</td>
+            {%endif%}
+        </tr>
+        {%endfor%}
+    </table>
+
+</body>
+{%endblock%}

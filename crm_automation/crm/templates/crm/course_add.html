@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+<body>
+<div class="row">
+    <div class="col"></div>
+        <div class="col-3">
+            <form method="post">
+                {%csrf_token%}
+                {{form.as_p}}
+                <input class="btn btn-success" type="submit" value="Create Course">
+            </form>
+        </div>
+    <div class="col"></div>
+</div>
+<table class="table">
+    <tr>
+        <td>Sl.no</td>
+        <td>Course Name</td>
+        <td>Course Duration</td>
+    </tr>
+    {%for course in courses%}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{course.course_name}}</td>
+        <td>{{course.course_duration}}</td>
+    </tr>
+    {%endfor%}
+</table>
+</body>
+{%endblock%}

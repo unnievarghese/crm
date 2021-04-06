@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+<body>
+<div class="row">
+    <div class="col"></div>
+    <div class="col-3" style="margin-top:50px">
+        <form method="post">
+            {%csrf_token%}
+            <input class="form-control" type="text" placeholder="Admission No" name="admission no">
+            <input class="btn btn-success" style="margin-top:15px" type="submit" value="Done">
+        </form>
+    </div>
+    <div class="col"></div>
+</div>
+    {%if nopayments%}
+        {{nopayments}}
+        <a href="{%url 'payment' admission_no %}">Make Payments here</a>
+    {%endif%}
+    {%if payment_objs%}
+        <table class="table" style="margin-top:15px">
+            <tr>
+                <td>SL.No</td>
+                <td>admission_no</td>
+                <td>amount</td>
+                <td>payment_date</td>
+            </tr>
+            {%for payment in payment_objs%}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{payment.admission_no}}</td>
+                <td>{{payment.amount}}</td>
+                <td>{{payment.payment_date}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+<div class="row">
+        <div class="col"></div>
+        <div class="col-6">
+            <div style="text-align:right">Total payment:{{total}}</div>
+            <div style="text-align:right">Balance payment:{{balance}}</div>
+        </div>
+        <div class="col"></div>
+</div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-3">
+        <a href="{%url 'payment' admission_no %}">Proceed to Payments</a>
+        </div>
+        <div class="col"></div>
+    </div>
+    {%endif%}
+</body>
+{%endblock%}

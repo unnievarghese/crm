@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+
+<body>
+    <table class="table">
+        <tr>
+            <td>Sl.no</td>
+            <td>Batch code</td>
+            <td>Course</td>
+            <td>Batch Date</td>
+            <td>Course Fee</td>
+            <td>Batch Status</td>
+        </tr>
+        {%for batch in batches%}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{batch.batch_code}}</td>
+            <td>{{batch.course}}</td>
+            <td>{{batch.batch_date}}</td>
+            <td>{{batch.course_fee}}</td>
+            <td>{{batch.batch_status}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+{%endblock%}

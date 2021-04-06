@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+<body>
+    <table class="table">
+        <tr>
+            <td>Admission No</td>
+            <td>Enquiry Id</td>
+            <td>Course Fee</td>
+            <td>Batch Code</td>
+            <td>Date</td>
+        </tr>
+        {%for admission in admissions%}
+        <tr>
+            <td>{{admission.admission_no}}</td>
+            <td>{{admission.enquiryid}}</td>
+            <td>{{admission.coursefee}}</td>
+            <td>{{admission.batch_code}}</td>
+            <td>{{admission.date}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+{%endblock%}}

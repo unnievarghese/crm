@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+<body>
+    <table class="table">
+        <tr>
+            <td>Enquiry Id</td>
+            <td>Name</td>
+            <td>Qualification</td>
+            <td>Course</td>
+            <td>Batch</td>
+            <td>Contact</td>
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td>{{result.enquiryid}}</td>
+            <td>{{result.studentname}}</td>
+            <td>{{result.qualification}}</td>
+            <td>{{result.course}}</td>
+            <td>{{result.batch}}</td>
+            <td>{{result.contact}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+{%endblock%}
