@@ -829,8 +829,8 @@ var BarsChart = (function() {
 	//
 
 	var $chart = $('#chart-bars');
-
-
+    var monthly_admission=document.getElementById('chart-bars').innerHTML
+        monthly_admission=monthly_admission.split(',')
 	//
 	// Methods
 	//
@@ -842,10 +842,10 @@ var BarsChart = (function() {
 		var ordersChart = new Chart($chart, {
 			type: 'bar',
 			data: {
-				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				labels: ['Jan','Feb','Mar','April','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 				datasets: [{
 					label: 'Sales',
-					data: [25, 20, 30, 22, 17, 29]
+					data: monthly_admission
 				}]
 			}
 		});
@@ -876,7 +876,9 @@ var SalesChart = (function() {
 
 
   // Methods
-
+var monthly_list=document.getElementById('chart-sales-dark').innerHTML
+    monthly_list=monthly_list.split(',')
+    console.log(monthly_list)
   function init($chart) {
 
     var salesChart = new Chart($chart, {
@@ -892,7 +894,7 @@ var SalesChart = (function() {
             ticks: {
               callback: function(value) {
                 if (!(value % 10)) {
-                  return '$' + value + 'k';
+                  return value;
                 }
               }
             }
@@ -906,20 +908,20 @@ var SalesChart = (function() {
               var content = '';
 
               if (data.datasets.length > 1) {
-                content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                content +=label;
               }
 
-              content += '<span class="popover-body-value">$' + yLabel + 'k</span>';
+              content +='Total Revenue :'+yLabel;
               return content;
             }
           }
         }
       },
       data: {
-        labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: ['Jan','Feb','Mar','April','May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
           label: 'Performance',
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60]
+          data: monthly_list
         }]
       }
     });

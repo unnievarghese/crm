@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.mixins import PermissionRequiredMixin,LoginRequiredMixin
 from crm.models import *
 from django.db.models import Q
+from django.contrib.auth.forms import User
+from datetime import datetime
+from django.db.models import Sum
 
 class signin(TemplateView):
     context={}
@@ -82,10 +85,31 @@ class homepage(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         name=str(request.user)
         self.context['name']=name
+        total_enquires=len(Enquiry.objects.all())
+        self.context['enquiry']=total_enquires
+        total_admission=len(Admission.objects.all())
+        self.context['admission']=total_admission
+        total_batches=len(Batch.objects.all())
+        self.context['batch']=total_batches
+        total_councillors=len(User.objects.all())-1
+        self.context['councilor']=total_councillors
+
+#       Line chart
+        monthly_payment = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+        cunrent_month = datetime.now().month
+        monthly_total = Payment.objects.filter(payment_date__month=cunrent_month).aggregate(Sum('amount'))
+        monthly_payment[cunrent_month-1]=str(monthly_total['amount__sum'])
+        self.context['monthly']=','.join(monthly_payment)
+
+#       Bar chart
+        monthly_admission = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+        admission = len(Admission.objects.filter(date__month=cunrent_month))
+        monthly_admission[cunrent_month - 1] = str(admission)
+        self.context['monthly_admission'] = ','.join(monthly_admission)
+
         return render(request, self.template_name,self.context)
     def post(self, request, *args, **kwargs):
         search_value=request.POST.get('search')
-        print(search_value)
         admission_obj=Admission.objects.filter(admission_no=search_value)
         if len(admission_obj)!=0:
             for admisssion in admission_obj:
@@ -122,11 +146,20 @@ class enquiry_creation(LoginRequiredMixin,TemplateView):
     form_class=enquiry_creation_form
     model=Enquiry
     def get(self, request, *args, **kwargs):
-        enquiry_obj = self.model.objects.last()
+        enquiry_obj = self.model.objects.all()
+        enquiryid_list=[]
         if enquiry_obj:
-            last_enquiry_id = enquiry_obj.enquiryid
+            for enquiry in enquiry_obj:
+                enquiryid_list.append(enquiry.enquiryid)
+            last_enquiry_id = sorted(enquiryid_list, key=lambda x: int(x[7:]),reverse=True)[-1]
             lst = int(last_enquiry_id.split('-')[1]) + 1
+            print(last_enquiry_id.split('-'))
             enquiry_id = 'Enquiry-' + str(lst)
+        # if enquiry_obj:
+        #     last_enquiry_id = enquiry_obj.enquiryid
+        #     lst = int(last_enquiry_id.split('-')[1]) + 1
+        #     print(last_enquiry_id.split('-'))
+        #     enquiry_id = 'Enquiry-' + str(lst)
         else:
             enquiry_id = 'Enquiry-1'
         form=self.form_class
