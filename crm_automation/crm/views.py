@@ -9,6 +9,8 @@ from django.db.models import Q
 from django.contrib.auth.forms import User
 from datetime import datetime
 from django.db.models import Sum
+from django.contrib.auth import get_user_model
+
 
 class signin(TemplateView):
     context={}
@@ -52,7 +54,7 @@ class councillor_creation(PermissionRequiredMixin, TemplateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
-            return render(request,'crm/centreheadpage.html')
+            return redirect('home')
         return redirect('councilorcreation')
 
 class course_creation(PermissionRequiredMixin,TemplateView):
@@ -93,6 +95,7 @@ class homepage(LoginRequiredMixin,TemplateView):
         self.context['batch']=total_batches
         total_councillors=len(User.objects.all())-1
         self.context['councilor']=total_councillors
+        self.context['user']=request.user
 
 #       Line chart
         monthly_payment = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
@@ -153,7 +156,6 @@ class enquiry_creation(LoginRequiredMixin,TemplateView):
                 enquiryid_list.append(enquiry.enquiryid)
             last_enquiry_id = sorted(enquiryid_list, key=lambda x: int(x[7:]),reverse=True)[-1]
             lst = int(last_enquiry_id.split('-')[1]) + 1
-            print(last_enquiry_id.split('-'))
             enquiry_id = 'Enquiry-' + str(lst)
         # if enquiry_obj:
         #     last_enquiry_id = enquiry_obj.enquiryid
@@ -163,7 +165,7 @@ class enquiry_creation(LoginRequiredMixin,TemplateView):
         else:
             enquiry_id = 'Enquiry-1'
         form=self.form_class
-        self.context['form']=form(initial={'enquiryid':enquiry_id})
+        self.context['form']=form(initial={'enquiryid':enquiry_id,'councillor': request.user})
         return render(request,self.template_name,self.context)
 
     def post(self, request, *args, **kwargs):
@@ -189,8 +191,9 @@ class admission_creation(LoginRequiredMixin,TemplateView):
         else:
             admission_no = 'admission-1'
         enquiry_id=kwargs.get('id')
+        councillor=kwargs.get('pk')
         form=self.form_class
-        self.context['form']=form(initial={'enquiryid':enquiry_id,'admission_no':admission_no})
+        self.context['form']=form(initial={'enquiryid':enquiry_id,'admission_no':admission_no,'councillor':councillor})
         return render(request,self.template_name,self.context)
     def post(self, request, *args, **kwargs):
         form=self.form_class(request.POST)
@@ -287,4 +290,54 @@ class batch_list(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         batches=self.model.objects.all()
         self.context['batches']=batches
+        return render(request,self.template_name,self.context)
+
+class batch_payment(TemplateView):
+    context={}
+    template_name = 'crm/batch_fee_details.html'
+    def get(self, request, *args, **kwargs):
+        batch_code=kwargs.get('id')
+        admission_obj=Admission.objects.filter(batch_code__batch_code=batch_code)
+        enquiry_id_list=[]
+        total_fee=0
+        for admission in admission_obj:
+            enquiry_id_list.append(admission.enquiryid)
+            total_fee+=admission.coursefee
+        total_feepaid=0
+        for enquiry in enquiry_id_list:
+            payment=Payment.objects.filter(enquiryid=enquiry).aggregate(Sum('amount'))
+            if payment['amount__sum'] is not None:
+                total_feepaid+=payment['amount__sum']
+        batchfee_balance=total_fee-total_feepaid
+        self.context['total']=total_fee
+        self.context['feepaid']=total_feepaid
+        self.context['balance']=batchfee_balance
+        return render(request,self.template_name,self.context)
+
+class councillor_performance(TemplateView):
+    context={}
+    template_name = 'crm/councillor_performance.html'
+
+    def get(self, request, *args, **kwargs):
+        councillor_list=[]
+        User = get_user_model()
+        users = User.objects.all()
+        for user in users:
+            councillor_list.append(user)
+        enquiry_list=Enquiry.objects.all()
+        admission_list=Admission.objects.all()
+        user_enquiry,user_admission=[],[]
+        performance={}
+        for user in councillor_list:
+            for enquiry in enquiry_list:
+                if str(user)==enquiry.councillor:
+                    user_enquiry.append(enquiry)
+            for admission in admission_list:
+                if str(user) == admission.councillor:
+                    user_admission.append(admission)
+            performance[str(user)]={'enquiry':len(user_enquiry),'admission':len(user_admission)}
+            user_admission,user_enquiry=[],[]
+        self.context['perf']=performance
+        print(performance)
+        self.context['councillor']=councillor_list
         return render(request,self.template_name,self.context)

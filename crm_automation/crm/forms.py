@@ -37,7 +37,6 @@ class batch_creation_form(ModelForm):
         fields='__all__'
         widgets = {
             'batch_code': forms.TextInput(attrs={'class': 'form-control'}),
-            'course': forms.TextInput(attrs={'class': 'form-control'}),
             'batch_date': forms.DateInput(attrs={'class': 'form-control'}),
             'course_fee': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -69,6 +68,7 @@ class enquiry_creation_form(ModelForm):
             'enquirydate': forms.DateInput(attrs={'class': 'form-control'}),
             'followup_date': forms.DateInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'councillor': forms.EmailInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
 
         }
     def clean(self):
@@ -88,6 +88,7 @@ class admission_creation_form(ModelForm):
             'enquiryid': forms.TextInput(attrs={'class': 'form-control'}),
             'coursefee': forms.TextInput(attrs={'class': 'form-control'}),
             'date': forms.DateInput(attrs={'class': 'form-control'}),
+            'councillor': forms.TextInput(attrs={'class': 'form-control','readonly':'readonly'}),
         }
 
     def clean(self):

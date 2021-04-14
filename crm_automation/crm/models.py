@@ -41,6 +41,7 @@ class Enquiry(models.Model):
         ('Cancel','Cancel')
     }
     status=models.CharField(max_length=20,choices=action)
+    councillor=models.CharField(max_length=50,null=True)
 
     def __str__(self):
         return str(self.enquiryid)
@@ -51,6 +52,7 @@ class Admission(models.Model):
     coursefee=models.IntegerField()
     batch_code=models.ForeignKey(Batch,on_delete=models.CASCADE)
     date=models.DateField(default=date.today())
+    councillor=models.CharField(max_length=50,null=True)
 
     def __str__(self):
         return self.admission_no

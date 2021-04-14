@@ -13,6 +13,7 @@
             <td>Batch Date</td>
             <td>Course Fee</td>
             <td>Batch Status</td>
+            <td>Fee Detail</td>
         </tr>
         {%for batch in batches%}
         <tr>
@@ -22,6 +23,7 @@
             <td>{{batch.batch_date}}</td>
             <td>{{batch.course_fee}}</td>
             <td>{{batch.batch_status}}</td>
+            <td><a href="{%url 'batch_payment' batch.batch_code %}">click for details</a></td>
         </tr>
         {%endfor%}
     </table>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+<body>
+    <div class="row" style="margin-top:20px;margin-left:10px">
+        <div class="col">Councillors
+            {%for user in perf%}
+            <p>{{user}}</p>
+            {%endfor%}
+        </div>
+        <div class="col">Total Enquiries
+            {%for user in perf.values%}
+            <p>{{user.enquiry}}</p>
+            {%endfor%}</div>
+        <div class="col">Total Admission
+            {%for user in perf.values%}
+            <p>{{user.admission}}</p>
+            {%endfor%}</div>
+        </div>
+    </div>
+</body>
+
+{%endblock%}

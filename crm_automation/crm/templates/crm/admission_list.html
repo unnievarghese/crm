@@ -10,6 +10,7 @@
             <td>Course Fee</td>
             <td>Batch Code</td>
             <td>Date</td>
+            <td>Councillor</td>
         </tr>
         {%for admission in admissions%}
         <tr>
@@ -18,6 +19,7 @@
             <td>{{admission.coursefee}}</td>
             <td>{{admission.batch_code}}</td>
             <td>{{admission.date}}</td>
+            <td>{{admission.councillor}}</td>
         </tr>
         {%endfor%}
     </table>

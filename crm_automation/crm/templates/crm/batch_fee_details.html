@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+{%extends 'crm/base.html'%}
+
+{%block body_block%}
+
+<body>
+    <table class="table">
+        <tr>
+            <td>Total Batch Fee</td>
+            <td>Total Fee Collected</td>
+            <td>Balance Batch Fee</td>
+        </tr>
+        <tr>
+            <td>{{total}}</td>
+            <td>{{feepaid}}</td>
+            <td>{{balance}}</td>
+        </tr>
+    </table>
+</body>
+
+
+{%endblock%}

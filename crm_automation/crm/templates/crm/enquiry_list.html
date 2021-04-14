@@ -4,6 +4,7 @@
 
 {%block body_block%}
 <body>
+
     <table class="table">
         <tr>
             <td>Enquiry Id</td>
@@ -15,6 +16,7 @@
             <td>Follow-up Date</td>
             <td>Status</td>
             <td> Registration Status</td>
+            <td>Councillor</td>
         </tr>
         {% for enquiry in enquires %}
         <tr>
@@ -27,10 +29,11 @@
             <td>{{enquiry.followup_date}}</td>
             <td>{{enquiry.status}}</td>
             {%if enquiry.status == 'call_back'%}
-                <td><a href="{%url 'admission' enquiry.enquiryid%}"> Register </a></td>
+                <td><a href="{%url 'admission' enquiry.enquiryid enquiry.councillor%}"> Register </a></td>
             {%else%}
                 <td>Admitted</td>
             {%endif%}
+            <td>{{enquiry.councillor}}</td>
         </tr>
         {%endfor%}
     </table>

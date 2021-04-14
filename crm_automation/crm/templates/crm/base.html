@@ -60,18 +60,22 @@
                 <span class="nav-link-text">Batch List</span>
               </a>
             </li>
+          {%if user.is_superuser%}
             <li class="nav-item">
-              <a class="nav-link" href="examples/tables.html">
+              <a class="nav-link" href="{%url 'councillor'%}">
                 <i class="ni ni-bullet-list-67 text-default"></i>
-                <span class="nav-link-text">Tables</span>
+                <span class="nav-link-text">Councillor Performance</span>
               </a>
             </li>
+          {%endif%}
+            {%if user == "AnonymousUser" %}
             <li class="nav-item">
               <a class="nav-link" href="{%url 'signin'%}">
                 <i class="ni ni-key-25 text-info"></i>
                 <span class="nav-link-text">Login</span>
               </a>
             </li>
+            {%endif%}
 
       {%if user != "AnonymousUser" %}
             <li class="nav-item">
@@ -305,9 +309,11 @@
 <!--              </nav>-->
 <!--            </div>-->
             <div class="col-lg-12 col-12 text-left">
+            {%if user.is_superuser%}
               <a href="{%url 'councilorcreation'%}" class="btn btn-sm btn-neutral">Register New Councillor</a>
               <a href="{%url 'createcourse'%}" class="btn btn-sm btn-neutral">Create New Course</a>
               <a href="{%url 'batch'%}" class="btn btn-sm btn-neutral">Create New Batch</a>
+            {%endif%}
               <a href="{%url 'enquiry'%}" class="btn btn-sm btn-neutral">Create New Enquiry</a>
               <a href="{%url 'paymentdetails'%}" class="btn btn-sm btn-neutral">Make Payment</a>
             </div>
